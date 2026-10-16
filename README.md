@@ -1,69 +1,94 @@
 # How to Perform CRUD Operations on ASP.NET Core Grid and Save to Database
 
-## Repository Description
-
-This repository contains an ASP.NET Core MVC sample that demonstrates CRUD operations using the Syncfusion EJ2 Grid with a SQL Server database.
-
 ## Project Overview
 
-This sample shows how the Syncfusion EJ2 Data Grid integrates with an ASP.NET Core backend using the URL adaptor. Grid data is retrieved from and saved to a SQL Server database through MVC controller actions implemented with Entity Framework Core.
+This sample shows how the [Syncfusion EJ2 ASP.NET Core Data Grid](https://www.syncfusion.com/aspnet-core-ui-controls/grid) integrates with an ASP.NET Core backend using the URL adaptor. Grid data is retrieved from and saved to a SQL Server database through MVC controller actions implemented with Entity Framework Core.
 
 The application uses a local NORTHWND database and focuses on practical server-side data handling such as create, read, update, delete, paging, and sorting operations.
 
 ## Key Features
 
-- ASP.NET Core MVC application
-- Syncfusion EJ2 Grid with URL adaptor
-- Full CRUD operations
-- Entity Framework Core with SQL Server
-- Server-side paging and sorting
+- Uses the Syncfusion EJ2 ASP.NET Core `DataGrid` to display order records from SQL Server.
+- Uses `UrlAdaptor` to communicate with server-side controller actions.
+- Supports adding, editing, and deleting order records directly from the Data Grid.
+- Saves Data Grid changes to the SQL Server database.
+- Uses Entity Framework Core with `OrderDbContext` for database operations.
+- Processes Data Grid queries and CRUD requests using the Syncfusion `DataManager`.
 
 ## Prerequisites
 
-- Visual Studio 2022
-- Supported .NET SDK for ASP.NET Core
+- Visual Studio 2022 or Visual Studio Code
+- .NET SDK compatible with the project's target framework
 - SQL Server LocalDB or Express
 
 ## Running the Application
 
-Follow the steps below to clone the repository, restore dependencies, and run the ASP.NET Core application using the .NET CLI.
+### Visual Studio 2022
 
-1. Clone the repository and navigate to the project directory:
+1. Clone or download this repository.
+2. Open the solution file:
 
-   ```bash
-   git clone https://github.com/SyncfusionExamples/how-to-perform-CRUD-operations-on-AspCore-grid-and-save-to-database.git
-   cd how-to-perform-CRUD-operations-on-AspCore-grid-and-save-to-database\WebApp
-   ```
+   `WebApp.sln`
 
-2. Restore the required NuGet packages:
+3. Update the SQL Server database connection string used by `OrderDbContext` with the server name, database name, and authentication details for a database that you are authorized to access.
+4. Restore the NuGet packages by rebuilding the solution.
+5. Set the startup project to:
 
-   ```bash
-   dotnet restore
-   ```
+   `WebApp`
 
-3. Update the database connection string:
-   - Open `appsettings.json`.
-   - Ensure the SQL Server connection string points to a valid **NORTHWND** database instance.
+6. Build the solution.
+7. Run the application using `Ctrl+F5`.
+8. Open the application URL displayed by Visual Studio after launch.
+9. Verify that the Data Grid displays the order records retrieved from SQL Server.
+10. Add, edit, or delete a record and confirm that the change is saved to the database.
 
-4. Build the application:
+### Visual Studio Code
 
-   ```bash
-   dotnet build
-   ```
+1. Clone or download this repository.
+2. Open the repository folder in Visual Studio Code.
+3. Open the integrated terminal.
+4. Navigate to the project directory:
 
-5. Run the application:
+```bash
+cd WebApp
+```
 
-   ```bash
-   dotnet run
-   ```
+5. Update the SQL Server database connection string used by `OrderDbContext` with the server name, database name, and authentication details for a database that you are authorized to access.
+6. Restore the NuGet packages:
 
-6. Open a browser and navigate to the displayed application URL.
+```bash
+dotnet restore
+```
 
-Once the application loads, the Syncfusion EJ2 Grid page allows performing create, read, update, and delete operations, with all changes persisted to the SQL Server database.
+7. Build the project:
 
-## Additional Resources
+```bash
+dotnet build
+```
 
-- [Syncfusion ASP.NET Core Grid Connecting to DataBase](https://ej2.syncfusion.com/aspnetcore/documentation/grid/connecting-to-database)
-- [Syncfusion ASP.NET Core Grid Editing](https://ej2.syncfusion.com/aspnetcore/documentation/grid/editing/)
-- [Syncfusion ASP.NET Core Grid Documentation](https://ej2.syncfusion.com/aspnetcore/documentation/grid)
-- [Syncfusion ASP.NET Core Demos](https://ej2.syncfusion.com/aspnetcore)
+8. Run the project:
+
+```bash
+dotnet run
+```
+
+9. Open the local URL displayed in the terminal after the application starts.
+10. Verify that the Data Grid displays the order records retrieved from SQL Server.
+11. Add, edit, or delete a record and confirm that the change is saved to the database.
+
+## Project Structure
+
+- `WebApp/Controllers/DataGridController.cs` — handles Data Grid requests and performs the server-side read, insert, update, and delete operations.
+- `WebApp/Models/OrderDbContext.cs` — defines the Entity Framework Core database context used to access order records.
+- `WebApp/Models/Orders.cs` — defines the order model displayed and managed by the Data Grid.
+- `WebApp/Views/DataGrid/Index.cshtml` — configures and renders the Syncfusion EJ2 ASP.NET Core Data Grid with the URL adaptor.
+
+## Support and Feedback
+
+- For general product questions, visit the [Syncfusion Community Forum](https://www.syncfusion.com/forums) or [Syncfusion Support](https://www.syncfusion.com/support).
+- To report an issue specific to this sample, open a GitHub issue in this repository.
+- Official documentation: [Getting Started with ASP.NET Core DataGrid](https://help.syncfusion.com/grid-sdk/asp-net-core/data-grid/getting-started-core)
+
+## License
+
+This is a Syncfusion sample project provided to demonstrate product usage. Review the [Syncfusion license terms](https://www.syncfusion.com/sales/pricing?category=ui-components) before using Syncfusion components in your own applications.
