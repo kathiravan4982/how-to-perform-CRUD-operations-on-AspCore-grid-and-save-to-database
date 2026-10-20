@@ -1,69 +1,83 @@
-# How to Perform CRUD Operations on ASP.NET Core Grid and Save to Database
+# How to Perform CRUD Operations on the ASP.NET Core Grid and Save to a Database
 
-## Repository Description
+## Overview
 
-This repository contains an ASP.NET Core MVC sample that demonstrates CRUD operations using the Syncfusion EJ2 Grid with a SQL Server database.
-
-## Project Overview
-
-This sample shows how the Syncfusion EJ2 Data Grid integrates with an ASP.NET Core backend using the URL adaptor. Grid data is retrieved from and saved to a SQL Server database through MVC controller actions implemented with Entity Framework Core.
-
-The application uses a local NORTHWND database and focuses on practical server-side data handling such as create, read, update, delete, paging, and sorting operations.
+This ASP.NET Core sample demonstrates how to wire the [Syncfusion ASP.NET Core Grid](https://ej2.syncfusion.com/aspnetcore/documentation/grid/getting-started-core) to a backend that loads and persists rows in SQL Server. The Grid is bound through the `UrlAdaptor` to controller actions that perform create, read, update, and delete operations against a SQL Server LocalDB database using Entity Framework Core. Server-side paging and sorting are handled in the controller via `DataManagerRequest`, so the Grid can scale beyond the size of a single page.
 
 ## Key Features
 
-- ASP.NET Core MVC application
-- Syncfusion EJ2 Grid with URL adaptor
-- Full CRUD operations
-- Entity Framework Core with SQL Server
-- Server-side paging and sorting
+- Syncfusion ASP.NET Core Grid rendered with the `<ejs-grid>` Tag Helper from the `Syncfusion.EJ2.AspNet.Core` package.
+- Remote data binding through `UrlAdaptor` configured on `<e-data-manager url="/DataGrid/UrlDataSource" adaptor="UrlAdaptor" insertUrl="/DataGrid/Insert" updateUrl="/DataGrid/Update" removeUrl="/DataGrid/Delete">`.
+- Inline CRUD enabled by `<e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Normal">` and the toolbar items `Add`, `Edit`, `Delete`, `Update`, `Cancel`.
+- Server-side paging (`PerformSkip`, `PerformTake`) and sorting (`PerformSorting`) handled by `Syncfusion.EJ2.Base.DataOperations` inside `DataGridController.UrlDatasource`.
+- Entity Framework Core persistence using `OrderDbContext : DbContext` over a `DbSet<Orders>` with `OrderID` (`[Key]`, identity, primary key) and `CustomerID`.
+- SQL Server LocalDB persistence using the checked-in `WebApp/AppData/NORTHWND.MDF` database.
+- Default route `{controller=DataGrid}/{action=Index}/{id?}` in `Startup.Configure` that opens the Grid on launch.
 
 ## Prerequisites
 
-- Visual Studio 2022
-- Supported .NET SDK for ASP.NET Core
-- SQL Server LocalDB or Express
+- Visual Studio 2022 or Visual Studio Code
+- .NET SDK compatible with `netcoreapp2.1` (note: .NET Core 2.1 reached end of support on 2021-08-21; upgrade to a current LTS framework before production use)
+- SQL Server Express LocalDB (the sample uses `(LocalDB)\MSSQLLocalDB` with `Integrated Security=True`)
+- The NuGet packages `Microsoft.EntityFrameworkCore 2.1.14` and `Syncfusion.EJ2.AspNet.Core 17.3.0.28`, restored via `dotnet restore`
 
-## Running the Application
+## How to Run the Project
 
-Follow the steps below to clone the repository, restore dependencies, and run the ASP.NET Core application using the .NET CLI.
+### Visual Studio 2022
 
-1. Clone the repository and navigate to the project directory:
+1. Clone or download this repository.
+2. Open `WebApp.sln` in Visual Studio 2022.
+3. Set `WebApp` as the startup project.
+4. Restore NuGet packages (right-click the solution and choose **Restore NuGet Packages**, or run `dotnet restore` from the `WebApp` folder).
+5. Update the SQL Server connection string in `WebApp/Models/OrderDbContext.cs` so `AttachDbFilename` points to the local `WebApp/AppData/NORTHWND.MDF` on your machine, or move the value to `WebApp/appsettings.json` and read it through configuration.
+6. Press **F5** to build and run with the `WebApp` launch profile. Kestrel serves the app at `https://localhost:5001` and `http://localhost:5000` (IIS Express profile: `http://localhost:57852`).
+7. The browser opens on `DataGrid/Index`. Verify that the Grid loads rows from `NORTHWND.MDF`, that paging and sorting work, and that Add, Edit, and Delete toolbar actions persist to the database.
 
-   ```bash
-   git clone https://github.com/SyncfusionExamples/how-to-perform-CRUD-operations-on-AspCore-grid-and-save-to-database.git
-   cd how-to-perform-CRUD-operations-on-AspCore-grid-and-save-to-database\WebApp
-   ```
+### Visual Studio Code
 
-2. Restore the required NuGet packages:
+1. Clone or download this repository.
+2. Open the `WebApp` folder in Visual Studio Code.
+3. Restore the NuGet packages:
 
    ```bash
    dotnet restore
    ```
 
-3. Update the database connection string:
-   - Open `appsettings.json`.
-   - Ensure the SQL Server connection string points to a valid **NORTHWND** database instance.
-
-4. Build the application:
+4. Update the SQL Server connection string in `WebApp/Models/OrderDbContext.cs` so `AttachDbFilename` points to the local `WebApp/AppData/NORTHWND.MDF` on your machine, or move the value to `WebApp/appsettings.json`.
+5. Build the project:
 
    ```bash
    dotnet build
    ```
 
-5. Run the application:
+6. Run the project:
 
    ```bash
    dotnet run
    ```
 
-6. Open a browser and navigate to the displayed application URL.
+7. Open a browser at `https://localhost:5001` or `http://localhost:5000`. Verify that the Grid loads rows from `NORTHWND.MDF`, that paging and sorting work, and that Add, Edit, and Delete toolbar actions persist to the database.
 
-Once the application loads, the Syncfusion EJ2 Grid page allows performing create, read, update, and delete operations, with all changes persisted to the SQL Server database.
+## Project Structure
 
-## Additional Resources
+- `WebApp/WebApp.csproj` — project file targeting `netcoreapp2.1` with `Microsoft.EntityFrameworkCore` and `Syncfusion.EJ2.AspNet.Core` package references.
+- `WebApp/Program.cs` — host entry point that loads `Startup`.
+- `WebApp/Startup.cs` — services registration (`AddMvc`, `SetCompatibilityVersion(Version_2_1)`) and default route to `DataGrid/Index`.
+- `WebApp/Controllers/DataGridController.cs` — `UrlDataSource`, `Insert`, `Update`, and `Delete` actions for the Syncfusion Grid `UrlAdaptor`.
+- `WebApp/Controllers/HomeController.cs` — default MVC scaffold for the site layout.
+- `WebApp/Models/Orders.cs` — `OrderID` (`[Key]`, primary key) and `CustomerID` entity.
+- `WebApp/Models/OrderDbContext.cs` — EF Core `DbContext` with the SQL Server LocalDB connection string.
+- `WebApp/Views/DataGrid/Index.cshtml` — Syncfusion Grid view using `<ejs-grid>`, `<e-data-manager>`, `<e-grid-editSettings>`, and `<e-grid-columns>` Tag Helpers.
+- `WebApp/Views/Shared/_Layout.cshtml` — layout that loads Syncfusion scripts/styles from CDN and registers `<ejs-scripts>`.
+- `WebApp/Properties/launchSettings.json` — Kestrel (`https://localhost:5001;http://localhost:5000`) and IIS Express (`http://localhost:57852`) launch profiles.
+- `WebApp/AppData/NORTHWND.MDF` and `NORTHWND_log.ldf` — checked-in SQL Server LocalDB sample database.
 
-- [Syncfusion ASP.NET Core Grid Connecting to DataBase](https://ej2.syncfusion.com/aspnetcore/documentation/grid/connecting-to-database)
-- [Syncfusion ASP.NET Core Grid Editing](https://ej2.syncfusion.com/aspnetcore/documentation/grid/editing/)
-- [Syncfusion ASP.NET Core Grid Documentation](https://ej2.syncfusion.com/aspnetcore/documentation/grid)
-- [Syncfusion ASP.NET Core Demos](https://ej2.syncfusion.com/aspnetcore)
+## Support and Feedback
+
+- For general product questions, visit the [Syncfusion Community Forum](https://www.syncfusion.com/forums) or [Syncfusion Support](https://www.syncfusion.com/support).
+- To report an issue specific to this sample, open a GitHub issue in this repository.
+- Official documentation: [Syncfusion ASP.NET Core Grid Getting Started](https://ej2.syncfusion.com/aspnetcore/documentation/grid/getting-started-core)
+
+## License
+
+This is a Syncfusion sample project provided to demonstrate product usage. Review the [Syncfusion license terms](https://www.syncfusion.com/sales/pricing?category=ui-components) before using Syncfusion products or components in your own applications.
