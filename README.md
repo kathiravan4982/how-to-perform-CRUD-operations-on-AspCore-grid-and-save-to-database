@@ -1,4 +1,4 @@
-# How to Perform CRUD Operations on ASP.NET Core Grid and Save to Database
+# How to Perform CRUD Operations on the ASP.NET Core Grid and Save to a Database
 
 ## Project Overview
 
@@ -39,8 +39,7 @@ The application uses a local NORTHWND database and focuses on practical server-s
 6. Build the solution.
 7. Run the application using `Ctrl+F5`.
 8. Open the application URL displayed by Visual Studio after launch.
-9. Verify that the Data Grid displays the order records retrieved from SQL Server.
-10. Add, edit, or delete a record and confirm that the change is saved to the database.
+9. Verify that the Data Grid displays order records from SQL Server and that adding, editing, or deleting a record saves the changes to the database.
 
 ### Visual Studio Code
 
@@ -73,8 +72,7 @@ dotnet run
 ```
 
 9. Open the local URL displayed in the terminal after the application starts.
-10. Verify that the Data Grid displays the order records retrieved from SQL Server.
-11. Add, edit, or delete a record and confirm that the change is saved to the database.
+10. Verify that the Data Grid displays order records from SQL Server and that adding, editing, or deleting a record saves the changes to the database.
 
 ## Project Structure
 
